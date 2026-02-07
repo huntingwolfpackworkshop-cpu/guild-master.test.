@@ -2,9 +2,9 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>ギルドマスター：キャラ別アイコン版</title>
+    <title>ギルドマスター：アイコン最適化版</title>
     <style>
-        /* スタイル設定（変更なし） */
+        /* スタイルは維持 */
         body { font-family: 'Hiragino Sans', 'Meiryo', sans-serif; background: #1a1c2c; color: #f4f4f4; padding: 20px; }
         .container { max-width: 950px; margin: auto; background: #212331; padding: 20px; border-radius: 15px; border: 1px solid #3d415e; }
         .header-ui { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: #2a2d3e; padding: 15px; border-radius: 10px; }
@@ -31,9 +31,10 @@
         .adv-name { font-weight: bold; font-size: 1.2em; display: block; margin-bottom: 5px; }
 
         .status-icon-box {
-            width: 70px; height: 70px; border-radius: 10px;
+            width: 75px; height: 75px; border-radius: 10px;
             display: flex; justify-content: center; align-items: center;
             margin-left: 10px; overflow: hidden; background: rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.1);
         }
         .status-icon-box img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -82,7 +83,7 @@
         <button class="btn-pass" onclick="passTurn()">何もしない（全員休憩）</button>
     </div>
 
-    <div id="log">>> 各キャラクター専用のアイコンを読み込みました。</div>
+    <div id="log">>> 画像名称を整理しました。リネームしてアップロードしてください。</div>
 </div>
 
 <script>
@@ -119,18 +120,13 @@
         selectedQuestIdx = null; selectedAdvIds = [];
     }
 
-    // アイコンのファイル名を取得する関数（タイポに対応）
+    // 正しい名称でパスを生成する関数
     function getIconPath(adv) {
         const key = adv.fileKey;
-        if (adv.isInjured) {
-            // コニーのタイポ(infured)に対応
-            return key === "connie" ? "connie.injured.png" : `${key}.injured.png`;
-        }
-        if (adv.isResting) {
-            // シェリーのタイポ(sherry,resting)に対応
-            return key === "sherry" ? "sherry.resting.png" : `${key}.resting.png`;
-        }
-        return `${key}.ready.png`;
+        let state = "ready";
+        if (adv.isInjured) state = "injured";
+        else if (adv.isResting) state = "resting";
+        return `${key}.${state}.png`;
     }
 
     function calculateRate() {
@@ -171,7 +167,7 @@
                         </div>
                     </div>
                     <div class="status-icon-box">
-                        <img src="${iconPath}" alt="${a.name}" onerror="this.style.display='none'">
+                        <img src="${iconPath}" alt="${a.name}" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'75\' height=\'75\' viewBox=\'0 0 75 75\'%3E%3Crect fill=\'%23eee\' width=\'75\' height=\'75\'/%3E%3Ctext fill=\'%23aaa\' font-family=\'sans-serif\' font-size=\'10\' dy=\'.3em\' x=\'50%25\' y=\'50%25\' text-anchor=\'middle\'%3EImage Not Found%3C/text%3E%3C/svg%3E'">
                     </div>
                 </div>
             `;
